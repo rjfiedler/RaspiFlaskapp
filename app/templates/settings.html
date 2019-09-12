@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center pt-4">  
+    <div class="col-lg-4 col-sm-12 pb-4">
+	  <div class="card h-100">
+  	    <div class="card-header">
+    	  <h4>Lights</h4>
+  	    </div>
+  	    <div class="card-body text-center">
+	      <h5 class="card-title">Light Fixture One</h5>
+   <!-- This btn-toolbar is used so you can put text inline with the button group -->
+		  <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Light toolbar 1">
+		    <div>
+		      <p>Light Fixture One is currently {% if pins[7].state == true %} on {% else %} off {% endif %}</p>
+		    </div>
+	        <div class="btn-group btn-group-lg" role="group" aria-label="Light toggler">
+ 	          <button type="button" class="btn btn-primary {% if pins[7].state == true %} active {% endif %}">On</button>
+	          <button type="button" class="btn btn-primary">Off</button>
+  	          <button type="button" class="btn btn-primary">Auto</button>
+	        </div>
+	      </div>
+  	    </div>
+  	    <div class="card-footer text-muted">
+    	  Lights will turn on in --
+  	    </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-sm-12 pb-4">
+	  <div class="card h-100 border-info">
+  	    <div class="card-header bg-info text-white">
+    	  <h4>Watering</h4>
+  	    </div>
+  	    <div class="card-body">
+    	  <h5 class="card-title text-center">Current settings</h5>
+    	  <p>Frequency:  {{ wateringfrequency }} (/day)<br>
+    	  Duration: {{ wateringduration }} (seconds)<br>
+    	  Zones: {{ wateringzone }}</p>
+    	  <h5 class="card-title text-center">New Settings</h5>
+    	  <form action="" method="POST">
+			{{ form.hidden_tag() }}
+			<p>
+				{{ form.wateringfrequency.label }} (/day) <br>
+				{{ form.wateringfrequency(size=32) }}
+			</p>
+			<p>
+				{{ form.wateringduration.label }} (s) <br>
+				{{ form.wateringduration(size=32) }}
+			</p>
+			<p>
+				{{ form.wateringzone.label }}<br>
+				{{ form.wateringzone(size=32) }}
+			</p>
+			<p><a href="/index">{{ form.submit() }}</a></p>
+    	  </form>
+  	    </div>
+  	    <div class="card-footer bg-info text-white">
+    	  The next watering cycle is scheduled for --:--
+  	    </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

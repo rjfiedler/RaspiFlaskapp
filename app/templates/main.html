@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Ajax stuff that can be consolidated -->
+<script>
+	
+	var Moisture = setInterval(getMoisture, 10000);
+	
+	function getMoisture() {
+		$.getJSON("/moisturesensor/0", function(result){
+			$("#moisturereading1").text( result.moisturereading );
+	});
+	}
+</script>
+<script>
+	
+	var Moisture = setInterval(getMoisture, 10000);
+	
+	function getMoisture() {
+		$.getJSON("/moisturesensor/1", function(result){
+			$("#moisturereading2").text( result.moisturereading );
+	});
+	}
+</script>
+<script>
+	
+	var Moisture = setInterval(getMoisture, 10000);
+	
+	function getMoisture() {
+		$.getJSON("/moisturesensor/2", function(result){
+			$("#moisturereading3").text( result.moisturereading );
+	});
+	}
+</script>
+<script>
+	
+	var Moisture = setInterval(getMoisture, 10000);
+	
+	function getMoisture() {
+		$.getJSON("/moisturesensor/3", function(result){
+			$("#moisturereading4").text( result.moisturereading );
+	});
+	}
+</script>
+
+
+
+
+
+
+<div class="container-fluid">
+  <div class="row justify-content-center pt-4">
+    <div class="col-lg-4 col-sm-12 pb-4">
+	  <div class="card h-100">
+  	    <div class="card-header">
+    	  <h4>Daily Log</h4>
+  	    </div>
+  	    <div class="card-body">
+	      <h5 class="card-title text-center">Water Readings</h5>
+    	  <form action="" method="POST">
+			{{ form3.hidden_tag() }}
+			<p>
+				{{ form3.TDSreading.label }} <br>
+				{{ form3.TDSreading(size=32) }}
+			</p>
+			<p>
+				{{ form3.PHreading.label }} <br>
+				{{ form3.PHreading(size=32) }}
+			</p>
+			<p><a href="/index">{{ form.submit() }}</a></p>
+    	  </form>	      
+  	    </div>
+  	    <div class="card-footer text-muted">
+    	  Lights will turn on in --
+  	    </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-sm-12 pb-4">
+	  <div class="card h-100 border-info">
+  	    <div class="card-header bg-info text-white">
+    	  <h4>Watering</h4>
+  	    </div>
+  	    <div class="card-body">
+    	  <h5 class="card-title text-center">Current settings</h5>
+    	  <p>Frequency:  {{ wateringfrequency }} (/day)<br>
+    	  Duration: {{ wateringduration }} (seconds)<br>
+    	  Zones: {{ wateringzone }}</p>
+    	  <h5 class="card-title text-center">New Settings</h5>
+    	  <form action="" method="POST">
+			{{ form.hidden_tag() }}
+			<p>
+				{{ form.wateringfrequency.label }} (/day) <br>
+				{{ form.wateringfrequency(size=32) }}
+			</p>
+			<p>
+				{{ form.wateringduration.label }} (s) <br>
+				{{ form.wateringduration(size=32) }}
+			</p>
+			<p>
+				{{ form.wateringzone.label }}<br>
+				{{ form.wateringzone(size=32) }}
+			</p>
+			<p><a href="/index">{{ form.submit() }}</a></p>
+    	  </form>
+  	    </div>
+  	    <div class="card-footer bg-info text-white">
+    	  The next watering cycle is scheduled for --:--
+  	    </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-sm-12 pb-4">
+		<div class="card h-100 border-secondary">
+			<div class="card-header bg-secondary text-white">
+				<h4>Data</h4>
+			</div>
+			<div class="card-body">
+				<h5 class="card-title text-center">Current Moisture Readings</h5>
+				<p>Sensor 1: <span id=moisturereading1></span> Sensor 2: <span id=moisturereading2></span> Sensor 3: <span id=moisturereading3></span> Sensor 4: <span id=moisturereading4></span></p>			
+				<img src={{ plotdaterange }} alt="my plot">
+				<form action="" method="POST">
+					{{ form.hidden_tag() }}
+					<p>{{ form2.startdatetime.label }}: {{ form2.startdatetime(size=32) }} {{ form2.enddatetime.label }}: {{ form2.enddatetime(size=32) }}</p>
+					<p>{{ form2.submit() }}</p>
+				</form>	
+			</div>
+		</div>
+    </div>
+  </div>
+</div>
+   
+
+
+
+
+<h1>RPi Web Server</h1>
+   {% for pin in pins %}
+   <h2>{{ pins[pin].name }}
+   {% if pins[pin].state == true %}
+      is currently <strong>on</strong></h2><div class="row"><div class="col-md-2">
+      <a href="/{{pin}}/off" class="btn btn-block btn-lg btn-default" role="button">Turn off</a></div></div>
+   {% else %}
+      is currently <strong>off</strong></h2><div class="row"><div class="col-md-2">
+      <a href="/{{pin}}/on" class="btn btn-block btn-lg btn-primary" role="button">Turn on</a></div></div>
+   {% endif %}
+   {% endfor %}
+{% endblock %}

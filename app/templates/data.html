@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+	
+	var Moisture = setInterval(getMoisture, 1000);
+	
+	function getMoisture() {
+		$.getJSON("/moisturesensor", function(result){
+			$("#moisturereading").text( result.moisturereading );
+	});
+	}
+</script>
+<div class="container-fluid">
+  <div class="row justify-content-center pt-4">
+	  <p id=moisturereading>test</p>
+  </div>
+  <div class="row justify-content-center pt-4">
+	  <img src="/MoisturePlot.png" alt="my plot">
+  </div>
+</div>
+{% endblock %}
